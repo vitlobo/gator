@@ -1,3 +1,4 @@
 gator
 .envrc
 *.log
+.vscode
