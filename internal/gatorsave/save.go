@@ -9,12 +9,12 @@ import (
 	"path/filepath"
 )
 
-func Write(path string, s SaveV1) error {
+func Save(path string, s SaveV1) error {
 	if err := ensureDirFor(path); err != nil {
 		return fmt.Errorf("ensureDirFor: %w", err)
 	}
 	s.Version = SaveVersion
-	if s.CurrentUser == "" {
+	if s.CurrentUserName == "" {
 		return errors.New("unable to retrieve current user")
 	}
 

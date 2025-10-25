@@ -2,32 +2,46 @@ package main
 
 import (
 	"fmt"
-	"log"
+	"os"
+
+	_ "github.com/vitlobo/gator/cmd"
 
 	"github.com/vitlobo/gator/internal/appcfg"
+	"github.com/vitlobo/gator/internal/core"
 	"github.com/vitlobo/gator/internal/gatorsave"
 )
 
 func main() {
 	path, err := gatorsave.DefaultPath()
-	if err != nil { log.Fatal(err) }
-
+	if err != nil {
+		fmt.Println("Error:", err)
+		os.Exit(1)
+	}
 	// Load previous config snapshot
 	snap, err := gatorsave.Load(path)
-	if err != nil { log.Fatalf("error reading config: %v", err) }
-	fmt.Printf("Read config      : %+v\n", snap)
+	if err != nil {
+		fmt.Println("Warning: could not read config:", err)
+	}
 
 	cfg := &appcfg.Config{}
 	appcfg.ApplySnapshot(cfg, snap)
+	state := &core.State{Cfg: cfg}
 
-	// Set current user and save snapshot
-	err = cfg.SetUser("aawhite")
-	if err != nil { log.Fatal(err) }
+	commands := core.GetRegisteredCommands()
 
-	// Load config again, apply, verify user is correct if changed from previous config
-	snap, err = gatorsave.Load(path)
-	if err != nil { log.Fatalf("error reading config: %v", err) }
-	appcfg.ApplySnapshot(cfg, snap)
+	if len(os.Args) < 2 {
+		fmt.Println("Usage: gator <command> [args...]")
+		fmt.Println("Available commands:", commands.GetCommandNames())
+		os.Exit(1)
+	}
 
-	fmt.Printf("Read config again: %+v\n", snap)
+	command := core.Command{
+		Name: os.Args[1],
+		Args: os.Args[2:],
+	}
+
+	if err := commands.Run(state, command); err != nil {
+		fmt.Println("Command failed:", err)
+		os.Exit(1)
+	}
 }

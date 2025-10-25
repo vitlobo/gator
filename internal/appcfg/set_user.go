@@ -8,15 +8,15 @@ import (
 
 func (cfg *Config) SetUser(username string) error {
 	cfg.CurrentUserName = username
-	return saveUser(cfg)
+	return saveUser(*cfg)
 }
 
-func saveUser(cfg *Config) error {
+func saveUser(cfg Config) error {
 	path, err := gatorsave.DefaultPath()
 	if err != nil { return err }
 
 	snap := snapshotFromConfig(cfg)
-	if err := gatorsave.Write(path, snap); err != nil {
+	if err := gatorsave.Save(path, snap); err != nil {
 		return fmt.Errorf("save failed: %w", err)
 	}
 
