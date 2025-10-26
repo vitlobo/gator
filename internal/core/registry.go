@@ -4,10 +4,12 @@ import (
 	"fmt"
 
 	"github.com/vitlobo/gator/internal/appcfg"
+	"github.com/vitlobo/gator/internal/database"
 )
 
 type State struct {
 	Cfg *appcfg.Config
+	Db *database.Queries
 }
 
 type Command struct {

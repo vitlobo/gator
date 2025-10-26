@@ -1,13 +1,16 @@
 package main
 
 import (
+	"database/sql"
 	"fmt"
 	"os"
 
+	_ "github.com/lib/pq"
 	_ "github.com/vitlobo/gator/cmd"
 
 	"github.com/vitlobo/gator/internal/appcfg"
 	"github.com/vitlobo/gator/internal/core"
+	"github.com/vitlobo/gator/internal/database"
 	"github.com/vitlobo/gator/internal/gatorsave"
 )
 
@@ -25,7 +28,19 @@ func main() {
 
 	cfg := &appcfg.Config{}
 	appcfg.ApplySnapshot(cfg, snap)
-	state := &core.State{Cfg: cfg}
+
+	db, err := sql.Open("postgres", cfg.DBURL)
+	if err != nil {
+		fmt.Println("error connecting to db:", err)
+		os.Exit(1)
+	}
+	defer db.Close()
+	dbQueries := database.New(db)
+
+	state := &core.State{
+		Cfg: cfg,
+		Db: dbQueries,
+	}
 
 	commands := core.GetRegisteredCommands()
 

@@ -1,6 +1,7 @@
 package login
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/vitlobo/gator/internal/core"
@@ -16,10 +17,16 @@ func handlerLogin(state *core.State, command core.Command) error {
 	}
 	username := command.Args[0]
 
-	if err := state.Cfg.SetUser(username); err != nil {
-		return fmt.Errorf("couldn't set current user: %w", err)
+	_, err := state.Db.GetUser(context.Background(), username)
+	if err != nil {
+		return fmt.Errorf("couldn't find user: %w", err)
 	}
 
-	fmt.Printf("User has been set to %s\n", username)
+	err = state.Cfg.SetUser(username)
+	if err != nil {
+		return fmt.Errorf("coudn't set current user: %w", err)
+	}
+
+	fmt.Printf("Logged in as: %s\n", username)
 	return nil
 }
