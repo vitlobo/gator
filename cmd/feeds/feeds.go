@@ -13,7 +13,9 @@ func init() {
 }
 
 func handlerListFeeds(state *core.State, command core.Command) error {
-	feeds, err := state.Db.GetFeeds(context.Background())
+	ctx := context.Background()
+
+	feeds, err := state.Db.GetFeeds(ctx)
 	if err != nil {
 		return fmt.Errorf("couldn't get feeds: %w", err)
 	}
@@ -27,20 +29,15 @@ func handlerListFeeds(state *core.State, command core.Command) error {
 	fmt.Println("====================================================")
 	fmt.Println()
 
+	blue := color.New(color.FgBlue).SprintFunc()
+
 	for _, feed := range feeds {
-		color.New(color.FgBlue).Print(" * ID:      ")
-		fmt.Println(feed.ID.String())
-		color.New(color.FgBlue).Print(" * Name:    ")
-		fmt.Println(feed.Name)
-		color.New(color.FgBlue).Print(" * URL:     ")
-		fmt.Println(feed.Url)
-		color.New(color.FgBlue).Print(" * User:    ")
-		fmt.Println(feed.Username)
-		color.New(color.FgBlue).Print(" * Created: ")
-		fmt.Println(feed.CreatedAt.String())
-		color.New(color.FgBlue).Print(" * Updated: ")
-		fmt.Println(feed.UpdatedAt.String())
-		fmt.Println()
+		fmt.Printf(" * ID:      %s\n", blue(feed.ID))
+		fmt.Printf(" * Name:    %s\n", blue(feed.Name))
+		fmt.Printf(" * URL:     %s\n", blue(feed.Url))
+		fmt.Printf(" * User:    %s\n", blue(feed.Username))
+		fmt.Printf(" * Created: %s\n", blue(feed.CreatedAt))
+		fmt.Printf(" * Updated: %s\n", blue(feed.UpdatedAt))
 		fmt.Println("====================================================")
 	}
 

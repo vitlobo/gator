@@ -19,6 +19,14 @@ type AppFeed struct {
 	UserID    uuid.UUID
 }
 
+type AppFeedFollow struct {
+	ID        uuid.UUID
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	UserID    uuid.UUID
+	FeedID    uuid.UUID
+}
+
 type AppGooseDbVersion struct {
 	ID        int32
 	VersionID int64

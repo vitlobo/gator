@@ -22,13 +22,15 @@ func handlerRegister(state *core.State, command core.Command) error {
 	}
 	name := command.Args[0]
 
-	_, err := state.Db.GetUser(context.Background(), name)
+	ctx := context.Background()
+
+	_, err := state.Db.GetUser(ctx, name)
 	if err == nil {
 		fmt.Printf("User %q already exists\n", name)
 		os.Exit(1)
 	}
 
-	user, err := state.Db.CreateUser(context.Background(), database.CreateUserParams{
+	user, err := state.Db.CreateUser(ctx, database.CreateUserParams{
 		ID:        uuid.New(),
 		CreatedAt: time.Now().UTC(),
 		UpdatedAt: time.Now().UTC(),
@@ -53,12 +55,9 @@ func handlerRegister(state *core.State, command core.Command) error {
 }
 
 func printUser(user database.AppUser) {
-	color.New(color.FgBlue).Print(" * ID:        ")
-	fmt.Println(user.ID)
-	color.New(color.FgBlue).Print(" * Name:      ")
-	fmt.Println(user.Name)
-	color.New(color.FgBlue).Print(" * CreatedAt: ")
-	fmt.Println(user.CreatedAt.String())
-	color.New(color.FgBlue).Print(" * UpdatedAt: ")
-	fmt.Println(user.UpdatedAt.String())
+	blue := color.New(color.FgBlue).SprintFunc()
+	fmt.Printf(" * ID:        %s\n", blue(user.ID))
+	fmt.Printf(" * Name:      %s\n", blue(user.Name))
+	fmt.Printf(" * CreatedAt: %s\n", blue(user.CreatedAt))
+	fmt.Printf(" * UpdatedAt: %s\n", blue(user.UpdatedAt))
 }

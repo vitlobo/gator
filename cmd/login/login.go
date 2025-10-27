@@ -25,7 +25,7 @@ func handlerLogin(state *core.State, command core.Command) error {
 
 	err = state.Cfg.SetUser(username)
 	if err != nil {
-		return fmt.Errorf("coudn't set current user: %w", err)
+		return fmt.Errorf("couldn't set current user: %w", err)
 	}
 
 	color.New(color.FgBlue).Print("Logged in as: ")

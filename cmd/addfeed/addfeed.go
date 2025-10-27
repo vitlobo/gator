@@ -41,7 +41,18 @@ func handlerAddFeed(state *core.State, command core.Command) error {
 		return fmt.Errorf("couldn't create feed: %w", err)
 	}
 
-	color.Blue("Feed added successfully:")
+	_, err = state.Db.CreateFeedFollow(ctx, database.CreateFeedFollowParams{
+		ID:        uuid.New(),
+		CreatedAt: time.Now().UTC(),
+		UpdatedAt: time.Now().UTC(),
+		UserID:    user.ID,
+		FeedID:    feed.ID,
+	})
+	if err != nil {
+		return fmt.Errorf("couldn't create feed_follow record: %w", err)
+	}
+
+	color.Blue("Feed added and followed successfully:")
 	fmt.Println("====================================================")
 	fmt.Println()
 	printFeed(feed)
@@ -52,16 +63,11 @@ func handlerAddFeed(state *core.State, command core.Command) error {
 }
 
 func printFeed(feed database.AppFeed) {
-	color.New(color.FgBlue).Print(" * ID:        ")
-	fmt.Println(feed.ID)
-	color.New(color.FgBlue).Print(" * UserID:    ")
-	fmt.Println(feed.UserID)
-	color.New(color.FgBlue).Print(" * Name:      ")
-	fmt.Println(feed.Name)
-	color.New(color.FgBlue).Print(" * Url:       ")
-	fmt.Println(feed.Url)
-	color.New(color.FgBlue).Print(" * CreatedAt: ")
-	fmt.Println(feed.CreatedAt.String())
-	color.New(color.FgBlue).Print(" * UpdatedAt: ")
-	fmt.Println(feed.UpdatedAt.String())
+	blue := color.New(color.FgBlue).SprintFunc()
+	fmt.Printf("%s %v\n", blue(" * ID:       "), feed.ID)
+	fmt.Printf("%s %v\n", blue(" * UserID:   "), feed.UserID)
+	fmt.Printf("%s %v\n", blue(" * Name:     "), feed.Name)
+	fmt.Printf("%s %v\n", blue(" * URL:      "), feed.Url)
+	fmt.Printf("%s %v\n", blue(" * CreatedAt:"), feed.CreatedAt)
+	fmt.Printf("%s %v\n", blue(" * UpdatedAt:"), feed.UpdatedAt)
 }

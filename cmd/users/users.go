@@ -23,8 +23,7 @@ func handlerListUsers(state *core.State, command core.Command) error {
 
 	for _, user := range users {
 		if user == state.Cfg.CurrentUserName {
-			fmt.Printf("* %s ", user)
-			color.Blue("(current)")
+			fmt.Printf("* %s %s\n", user, color.BlueString("(current)"))
 			continue
 		}
 		fmt.Printf("* %s\n", user)
