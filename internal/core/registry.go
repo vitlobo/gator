@@ -5,11 +5,13 @@ import (
 
 	"github.com/vitlobo/gator/internal/appcfg"
 	"github.com/vitlobo/gator/internal/database"
+	"github.com/vitlobo/gator/internal/gatorapi"
 )
 
 type State struct {
-	Cfg *appcfg.Config
-	Db *database.Queries
+	Cfg         *appcfg.Config
+	Db          *database.Queries
+	GatorClient *gatorapi.Client
 }
 
 type Command struct {
