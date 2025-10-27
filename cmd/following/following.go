@@ -6,7 +6,7 @@ import (
 
 	"github.com/fatih/color"
 	"github.com/vitlobo/gator/internal/core"
-	"github.com/vitlobo/gator/internal/database"
+	"github.com/vitlobo/gator/internal/util"
 )
 
 func init() {
@@ -21,30 +21,23 @@ func handlerFollowing(state *core.State, command core.Command) error {
 		return fmt.Errorf("couldn't find user: %w", err)
 	}
 
-	feedsForUser, err := state.Db.GetFeedFollowsForUser(ctx, user.ID)
+	feedFollows, err := state.Db.GetFeedFollowsForUser(ctx, user.ID)
 	if err != nil {
 		return fmt.Errorf("couldn't get feeds for %s: %w", user.Name, err)
 	}
 
-	if len(feedsForUser) == 0 {
-		color.Yellow("%s isn't following any feeds yet.", user.Name)
+	if len(feedFollows) == 0 {
+		yellow := color.New(color.FgYellow).SprintFunc()
+		fmt.Printf("%s isn't following any feeds yet.\n", yellow(user.Name))
 		return nil
 	}
 
 	color.Blue("Feeds followed by %s:", user.Name)
 	fmt.Println("====================================================")
 	fmt.Println()
-	printFeedsForUser(feedsForUser)
+	util.PrintFeedsForUser(feedFollows)
 	fmt.Println()
 	fmt.Println("====================================================")
 
 	return nil
-}
-
-func printFeedsForUser(feeds []database.GetFeedFollowsForUserRow) {
-	blue := color.New(color.FgBlue).SprintFunc()
-
-	for _, feed := range feeds {
-		fmt.Printf(" * %s\n", blue(feed.FeedName))
-	}
 }

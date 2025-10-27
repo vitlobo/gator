@@ -10,6 +10,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/vitlobo/gator/internal/core"
 	"github.com/vitlobo/gator/internal/database"
+	"github.com/vitlobo/gator/internal/util"
 )
 
 func init() {
@@ -47,17 +48,9 @@ func handlerRegister(state *core.State, command core.Command) error {
 	color.Blue("User created successfully:")
 	fmt.Println("====================================================")
 	fmt.Println()
-	printUser(user)
+	util.PrintUser(user)
 	fmt.Println()
 	fmt.Println("====================================================")
 
 	return nil
-}
-
-func printUser(user database.AppUser) {
-	blue := color.New(color.FgBlue).SprintFunc()
-	fmt.Printf(" * ID:        %s\n", blue(user.ID))
-	fmt.Printf(" * Name:      %s\n", blue(user.Name))
-	fmt.Printf(" * CreatedAt: %s\n", blue(user.CreatedAt))
-	fmt.Printf(" * UpdatedAt: %s\n", blue(user.UpdatedAt))
 }

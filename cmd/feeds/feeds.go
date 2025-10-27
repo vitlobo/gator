@@ -6,6 +6,7 @@ import (
 
 	"github.com/fatih/color"
 	"github.com/vitlobo/gator/internal/core"
+	"github.com/vitlobo/gator/internal/util"
 )
 
 func init() {
@@ -28,18 +29,7 @@ func handlerListFeeds(state *core.State, command core.Command) error {
 	color.New(color.FgBlue).Printf("Found %d feeds:\n", len(feeds))
 	fmt.Println("====================================================")
 	fmt.Println()
-
-	blue := color.New(color.FgBlue).SprintFunc()
-
-	for _, feed := range feeds {
-		fmt.Printf(" * ID:      %s\n", blue(feed.ID))
-		fmt.Printf(" * Name:    %s\n", blue(feed.Name))
-		fmt.Printf(" * URL:     %s\n", blue(feed.Url))
-		fmt.Printf(" * User:    %s\n", blue(feed.Username))
-		fmt.Printf(" * Created: %s\n", blue(feed.CreatedAt))
-		fmt.Printf(" * Updated: %s\n", blue(feed.UpdatedAt))
-		fmt.Println("====================================================")
-	}
+	util.PrintFeeds(feeds)
 
 	return nil
 }

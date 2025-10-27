@@ -9,6 +9,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/vitlobo/gator/internal/core"
 	"github.com/vitlobo/gator/internal/database"
+	"github.com/vitlobo/gator/internal/util"
 )
 
 func init() {
@@ -49,25 +50,16 @@ func handlerAddFeed(state *core.State, command core.Command) error {
 		FeedID:    feed.ID,
 	})
 	if err != nil {
-		return fmt.Errorf("couldn't create feed_follow record: %w", err)
+		return fmt.Errorf("couldn't create feed follow: %w", err)
 	}
 
-	color.Blue("Feed added and followed successfully:")
+	color.Blue("Feed created successfully:")
 	fmt.Println("====================================================")
 	fmt.Println()
-	printFeed(feed)
+	util.PrintAddFeed(feed, user)
 	fmt.Println()
+	color.Blue("Feed followed successfully:")
 	fmt.Println("====================================================")
 
 	return nil
-}
-
-func printFeed(feed database.AppFeed) {
-	blue := color.New(color.FgBlue).SprintFunc()
-	fmt.Printf("%s %v\n", blue(" * ID:       "), feed.ID)
-	fmt.Printf("%s %v\n", blue(" * UserID:   "), feed.UserID)
-	fmt.Printf("%s %v\n", blue(" * Name:     "), feed.Name)
-	fmt.Printf("%s %v\n", blue(" * URL:      "), feed.Url)
-	fmt.Printf("%s %v\n", blue(" * CreatedAt:"), feed.CreatedAt)
-	fmt.Printf("%s %v\n", blue(" * UpdatedAt:"), feed.UpdatedAt)
 }
