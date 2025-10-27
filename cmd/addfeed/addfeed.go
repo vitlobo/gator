@@ -52,10 +52,16 @@ func handlerAddFeed(state *core.State, command core.Command) error {
 }
 
 func printFeed(feed database.AppFeed) {
-	fmt.Printf(" * ID:        %v\n", feed.ID)
-	fmt.Printf(" * UserID:    %v\n", feed.UserID)
-	fmt.Printf(" * Name:      %v\n", feed.Name)
-	fmt.Printf(" * Url:       %v\n", feed.Url)
-	fmt.Printf(" * CreatedAt: %v\n", feed.CreatedAt)
-	fmt.Printf(" * UpdatedAt: %v\n", feed.UpdatedAt)
+	color.New(color.FgBlue).Print(" * ID:        ")
+	fmt.Println(feed.ID)
+	color.New(color.FgBlue).Print(" * UserID:    ")
+	fmt.Println(feed.UserID)
+	color.New(color.FgBlue).Print(" * Name:      ")
+	fmt.Println(feed.Name)
+	color.New(color.FgBlue).Print(" * Url:       ")
+	fmt.Println(feed.Url)
+	color.New(color.FgBlue).Print(" * CreatedAt: ")
+	fmt.Println(feed.CreatedAt.String())
+	color.New(color.FgBlue).Print(" * UpdatedAt: ")
+	fmt.Println(feed.UpdatedAt.String())
 }

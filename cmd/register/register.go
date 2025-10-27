@@ -29,10 +29,10 @@ func handlerRegister(state *core.State, command core.Command) error {
 	}
 
 	user, err := state.Db.CreateUser(context.Background(), database.CreateUserParams{
-		ID: uuid.New(),
+		ID:        uuid.New(),
 		CreatedAt: time.Now().UTC(),
 		UpdatedAt: time.Now().UTC(),
-		Name: name,
+		Name:      name,
 	})
 	if err != nil {
 		return fmt.Errorf("couldn't create user: %w", err)
@@ -53,8 +53,12 @@ func handlerRegister(state *core.State, command core.Command) error {
 }
 
 func printUser(user database.AppUser) {
-	fmt.Printf(" * ID:      %v\n", user.ID)
-	fmt.Printf(" * Name:    %v\n", user.Name)
-	fmt.Printf(" * CreatedAt: %v\n", user.CreatedAt)
-	fmt.Printf(" * UpdatedAt: %v\n", user.UpdatedAt)
+	color.New(color.FgBlue).Print(" * ID:        ")
+	fmt.Println(user.ID)
+	color.New(color.FgBlue).Print(" * Name:      ")
+	fmt.Println(user.Name)
+	color.New(color.FgBlue).Print(" * CreatedAt: ")
+	fmt.Println(user.CreatedAt.String())
+	color.New(color.FgBlue).Print(" * UpdatedAt: ")
+	fmt.Println(user.UpdatedAt.String())
 }
