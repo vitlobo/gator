@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io/fs"
 	"os"
 	"path/filepath"
 )
@@ -13,36 +12,51 @@ func Save(path string, s SaveV1) error {
 	if err := ensureDirFor(path); err != nil {
 		return fmt.Errorf("ensureDirFor: %w", err)
 	}
+
 	s.Version = SaveVersion
 	if s.CurrentUserName == "" {
 		return errors.New("unable to retrieve current user")
 	}
 
-	data, err := json.Marshal(s)
-	if err != nil {
-		return fmt.Errorf("marshal: %w", err)
-	}
-	return atomicWriteJSON(path, data, 0600)
-}
-
-func atomicWriteJSON(path string, data []byte, perm fs.FileMode) error {
 	dir := filepath.Dir(path)
 	base := filepath.Base(path)
 
-	f, err := os.CreateTemp(dir, base+".tmp-*")
-	if err != nil { return fmt.Errorf("CreateTemp: %w", err) }
-	tmp := f.Name()
-	defer func() { _ = f.Close(); _ = os.Remove(tmp) }()
+	tmpFile, err := os.CreateTemp(dir, base+".tmp-*")
+	if err != nil {
+		return fmt.Errorf("CreateTemp: %w", err)
+	}
+	tmpPath := tmpFile.Name()
 
-	if _, err := f.Write(data); err != nil { return fmt.Errorf("write: %w", err) }
-    if err := f.Sync(); err != nil { return fmt.Errorf("fsync: %w", err) }
-    if err := f.Close(); err != nil { return fmt.Errorf("close: %w", err) }
+	defer func() {
+		tmpFile.Close()
+		os.Remove(tmpPath)
+	}()
 
-    if err := os.Rename(tmp, path); err != nil { return fmt.Errorf("rename: %w", err) }
-    if err := os.Chmod(path, perm); err != nil { return fmt.Errorf("chmod: %w", err) }
+	encoder := json.NewEncoder(tmpFile)
+	encoder.SetIndent("", "  ")
+	if err := encoder.Encode(s); err != nil {
+		return fmt.Errorf("encode: %w", err)
+	}
+
+	if err := tmpFile.Sync(); err != nil {
+		return fmt.Errorf("fsync: %w", err)
+	}
+	if err := tmpFile.Close(); err != nil {
+		return fmt.Errorf("close: %w", err)
+	}
+
+	if err := os.Rename(tmpPath, path); err != nil {
+		return fmt.Errorf("rename: %w", err)
+	}
+
+	if err := os.Chmod(path, 0600); err != nil {
+		return fmt.Errorf("chmod: %w", err)
+	}
 
 	if d, err := os.Open(dir); err == nil {
-		_ = d.Sync(); _ = d.Close()
+		_ = d.Sync()
+		_ = d.Close()
 	}
+
 	return nil
 }
