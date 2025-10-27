@@ -10,6 +10,15 @@ import (
 	"github.com/google/uuid"
 )
 
+type AppFeed struct {
+	ID        uuid.UUID
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	Name      string
+	Url       string
+	UserID    uuid.UUID
+}
+
 type AppGooseDbVersion struct {
 	ID        int32
 	VersionID int64

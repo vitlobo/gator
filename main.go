@@ -2,10 +2,10 @@ package main
 
 import (
 	"database/sql"
-	"fmt"
 	"os"
 	"time"
 
+	"github.com/fatih/color"
 	_ "github.com/lib/pq"
 	_ "github.com/vitlobo/gator/cmd"
 
@@ -19,13 +19,13 @@ import (
 func main() {
 	path, err := gatorsave.DefaultPath()
 	if err != nil {
-		fmt.Println("Error:", err)
+		color.Red("Error:", err)
 		os.Exit(1)
 	}
 	// Load previous config snapshot
 	snap, err := gatorsave.Load(path)
 	if err != nil {
-		fmt.Println("Warning: could not read config:", err)
+		color.Yellow("Warning: could not read config:", err)
 	}
 
 	cfg := &appcfg.Config{}
@@ -33,7 +33,7 @@ func main() {
 
 	db, err := sql.Open("postgres", cfg.DBURL)
 	if err != nil {
-		fmt.Println("error connecting to db:", err)
+		color.Red("error connecting to db:", err)
 		os.Exit(1)
 	}
 	defer db.Close()
@@ -50,8 +50,8 @@ func main() {
 	commands := core.GetRegisteredCommands()
 
 	if len(os.Args) < 2 {
-		fmt.Println("Usage: gator <command> [args...]")
-		fmt.Println("Available commands:", commands.GetCommandNames())
+		color.Yellow("Usage: gator <command> [args...]")
+		color.Yellow("Available commands:", commands.GetCommandNames())
 		os.Exit(1)
 	}
 
@@ -61,7 +61,7 @@ func main() {
 	}
 
 	if err := commands.Run(state, command); err != nil {
-		fmt.Println("Command failed:", err)
+		color.Red("Error: %v", err)
 		os.Exit(1)
 	}
 }

@@ -1,6 +1,4 @@
 -- +goose Up
-
--- Create schema if it doesn't exist, owned by gator_migrator
 CREATE SCHEMA IF NOT EXISTS app AUTHORIZATION gator_migrator;
 
 -- Grants for roles

@@ -6,6 +6,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/fatih/color"
 	"github.com/google/uuid"
 	"github.com/vitlobo/gator/internal/core"
 	"github.com/vitlobo/gator/internal/database"
@@ -41,8 +42,13 @@ func handlerRegister(state *core.State, command core.Command) error {
 		return fmt.Errorf("couldn't set current user: %w", err)
 	}
 
-	fmt.Println("User created successfully:")
+	color.Blue("User created successfully:")
+	fmt.Println("====================================================")
+	fmt.Println()
 	printUser(user)
+	fmt.Println()
+	fmt.Println("====================================================")
+
 	return nil
 }
 

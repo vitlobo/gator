@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/fatih/color"
 	"github.com/vitlobo/gator/internal/core"
 )
 
@@ -17,6 +18,6 @@ func handlerReset(state *core.State, command core.Command) error {
 		return fmt.Errorf("couldn't delete users: %w", err)
 	}
 
-	fmt.Println("Database reset successfully!")
+	color.Blue("Database reset successfully!")
 	return nil
 }

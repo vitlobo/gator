@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/fatih/color"
 	"github.com/vitlobo/gator/internal/core"
 )
 
@@ -27,6 +28,7 @@ func handlerLogin(state *core.State, command core.Command) error {
 		return fmt.Errorf("coudn't set current user: %w", err)
 	}
 
-	fmt.Printf("Logged in as: %s\n", username)
+	color.New(color.FgBlue).Print("Logged in as: ")
+	fmt.Println(username)
 	return nil
 }
