@@ -51,7 +51,7 @@ func handlerAddFeed(state *core.State, command core.Command, user database.AppUs
 	color.Blue("Feed created successfully:")
 	fmt.Println("====================================================")
 	fmt.Println()
-	util.PrintAddFeed(feed, user)
+	util.PrintAddFeed(user, feed)
 	fmt.Println()
 	color.Blue("Feed followed successfully:")
 	util.PrintFeedFollow(feedFollow.UserName, feedFollow.FeedName)

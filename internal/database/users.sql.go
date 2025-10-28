@@ -42,6 +42,24 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (AppUser
 	return i, err
 }
 
+const deleteUserByID = `-- name: DeleteUserByID :exec
+DELETE FROM app.users WHERE id = $1
+`
+
+func (q *Queries) DeleteUserByID(ctx context.Context, id uuid.UUID) error {
+	_, err := q.db.ExecContext(ctx, deleteUserByID, id)
+	return err
+}
+
+const deleteUserByName = `-- name: DeleteUserByName :exec
+DELETE FROM app.users WHERE name = $1
+`
+
+func (q *Queries) DeleteUserByName(ctx context.Context, name string) error {
+	_, err := q.db.ExecContext(ctx, deleteUserByName, name)
+	return err
+}
+
 const deleteUsers = `-- name: DeleteUsers :exec
 DELETE FROM app.users
 `
@@ -51,12 +69,28 @@ func (q *Queries) DeleteUsers(ctx context.Context) error {
 	return err
 }
 
-const getUser = `-- name: GetUser :one
+const getUserByID = `-- name: GetUserByID :one
+SELECT id, created_at, updated_at, name FROM app.users WHERE id = $1
+`
+
+func (q *Queries) GetUserByID(ctx context.Context, id uuid.UUID) (AppUser, error) {
+	row := q.db.QueryRowContext(ctx, getUserByID, id)
+	var i AppUser
+	err := row.Scan(
+		&i.ID,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.Name,
+	)
+	return i, err
+}
+
+const getUserByName = `-- name: GetUserByName :one
 SELECT id, created_at, updated_at, name FROM app.users WHERE name = $1
 `
 
-func (q *Queries) GetUser(ctx context.Context, name string) (AppUser, error) {
-	row := q.db.QueryRowContext(ctx, getUser, name)
+func (q *Queries) GetUserByName(ctx context.Context, name string) (AppUser, error) {
+	row := q.db.QueryRowContext(ctx, getUserByName, name)
 	var i AppUser
 	err := row.Scan(
 		&i.ID,

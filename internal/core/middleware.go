@@ -16,7 +16,7 @@ func MiddlewareLoggedIn(
 		}
 
 		ctx := context.Background()
-		user, err := state.Db.GetUser(ctx, state.Cfg.CurrentUserName)
+		user, err := state.Db.GetUserByName(ctx, state.Cfg.CurrentUserName)
 		if err != nil {
 			return fmt.Errorf("couldn't find user %q in database: %w", state.Cfg.CurrentUserName, err)
 		}

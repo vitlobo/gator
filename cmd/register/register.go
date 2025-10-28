@@ -25,7 +25,7 @@ func handlerRegister(state *core.State, command core.Command) error {
 
 	ctx := context.Background()
 
-	_, err := state.Db.GetUser(ctx, name)
+	_, err := state.Db.GetUserByName(ctx, name)
 	if err == nil {
 		fmt.Printf("User %q already exists\n", name)
 		os.Exit(1)

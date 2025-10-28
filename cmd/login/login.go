@@ -18,7 +18,7 @@ func handlerLogin(state *core.State, command core.Command) error {
 	}
 	username := command.Args[0]
 
-	_, err := state.Db.GetUser(context.Background(), username)
+	_, err := state.Db.GetUserByName(context.Background(), username)
 	if err != nil {
 		return fmt.Errorf("couldn't find user: %w", err)
 	}

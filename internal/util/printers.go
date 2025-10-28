@@ -7,7 +7,7 @@ import (
 	"github.com/vitlobo/gator/internal/database"
 )
 
-func PrintAddFeed(feed database.AppFeed, user database.AppUser) {
+func PrintAddFeed(user database.AppUser, feed database.AppFeed) {
 	blue := color.New(color.FgBlue).SprintFunc()
 	fmt.Printf("%s %v\n", blue(" * ID:       "), feed.ID)
 	fmt.Printf("%s %v\n", blue(" * CreatedAt:"), feed.CreatedAt)
@@ -49,4 +49,10 @@ func PrintUser(user database.AppUser) {
 	blue := color.New(color.FgBlue).SprintFunc()
 	fmt.Printf(" * ID:        %s\n", blue(user.ID))
 	fmt.Printf(" * Name:      %s\n", blue(user.Name))
+}
+
+func PrintDeleteFeedFollow(feed database.GetFeedByUrlRow) {
+	blue := color.New(color.FgBlue).SprintFunc()
+	fmt.Printf("%s %v\n", blue(" * Feed:"), feed.Name)
+	fmt.Printf("%s %v\n", blue(" * Url: "), feed.Url)
 }

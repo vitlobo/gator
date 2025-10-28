@@ -24,7 +24,7 @@ func handlerFollow(state *core.State, command core.Command, user database.AppUse
 
 	ctx := context.Background()
 
-	feed, err := state.Db.GetFeedFromUrl(ctx, url)
+	feed, err := state.Db.GetFeedByUrl(ctx, url)
 	if err != nil {
 		return fmt.Errorf("Feed not found in database: %s", url)
 	}
