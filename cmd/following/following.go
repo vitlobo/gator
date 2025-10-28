@@ -19,12 +19,12 @@ func handlerFollowing(state *core.State, command core.Command, user database.App
 
 	feedFollows, err := state.Db.GetFeedFollowsForUser(ctx, user.ID)
 	if err != nil {
-		return fmt.Errorf("couldn't get feeds for %s: %w", user.Name, err)
+		return fmt.Errorf("couldn't get feed follows for %s: %w", user.Name, err)
 	}
 
 	if len(feedFollows) == 0 {
 		yellow := color.New(color.FgYellow).SprintFunc()
-		fmt.Printf("%s isn't following any feeds yet.\n", yellow(user.Name))
+		fmt.Printf("%s isn't following any feeds.\n", yellow(user.Name))
 		return nil
 	}
 

@@ -10,11 +10,11 @@ import (
 func PrintAddFeed(feed database.AppFeed, user database.AppUser) {
 	blue := color.New(color.FgBlue).SprintFunc()
 	fmt.Printf("%s %v\n", blue(" * ID:       "), feed.ID)
+	fmt.Printf("%s %v\n", blue(" * CreatedAt:"), feed.CreatedAt)
+	fmt.Printf("%s %v\n", blue(" * UpdatedAt:"), feed.UpdatedAt)
 	fmt.Printf("%s %v\n", blue(" * Name:     "), feed.Name)
 	fmt.Printf("%s %v\n", blue(" * URL:      "), feed.Url)
 	fmt.Printf("%s %v\n", blue(" * User:     "), user.Name)
-	fmt.Printf("%s %v\n", blue(" * CreatedAt:"), feed.CreatedAt)
-	fmt.Printf("%s %v\n", blue(" * UpdatedAt:"), feed.UpdatedAt)
 }
 
 func PrintFeeds(feeds []database.GetFeedsRow) {
@@ -22,19 +22,19 @@ func PrintFeeds(feeds []database.GetFeedsRow) {
 
 	for _, feed := range feeds {
 		fmt.Printf(" * ID:      %s\n", blue(feed.ID))
+		fmt.Printf(" * Created: %s\n", blue(feed.CreatedAt))
+		fmt.Printf(" * Updated: %s\n", blue(feed.UpdatedAt))
 		fmt.Printf(" * Name:    %s\n", blue(feed.Name))
 		fmt.Printf(" * URL:     %s\n", blue(feed.Url))
 		fmt.Printf(" * User:    %s\n", blue(feed.Username))
-		fmt.Printf(" * Created: %s\n", blue(feed.CreatedAt))
-		fmt.Printf(" * Updated: %s\n", blue(feed.UpdatedAt))
 		fmt.Println("====================================================")
 	}
 }
 
 func PrintFeedFollow(username, feedname string) {
 	blue := color.New(color.FgBlue).SprintFunc()
-	fmt.Printf("%s %v\n", blue(" * Feed:       "), feedname)
-	fmt.Printf("%s %v\n", blue(" * Followed By:"), username)
+	fmt.Printf("%s %v\n", blue(" * User:"), username)
+	fmt.Printf("%s %v\n", blue(" * Feed:"), feedname)
 }
 
 func PrintFeedsForUser(feedFollows []database.GetFeedFollowsForUserRow) {
@@ -49,6 +49,4 @@ func PrintUser(user database.AppUser) {
 	blue := color.New(color.FgBlue).SprintFunc()
 	fmt.Printf(" * ID:        %s\n", blue(user.ID))
 	fmt.Printf(" * Name:      %s\n", blue(user.Name))
-	fmt.Printf(" * CreatedAt: %s\n", blue(user.CreatedAt))
-	fmt.Printf(" * UpdatedAt: %s\n", blue(user.UpdatedAt))
 }

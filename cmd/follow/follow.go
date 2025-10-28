@@ -17,12 +17,12 @@ func init() {
 }
 
 func handlerFollow(state *core.State, command core.Command, user database.AppUser) error {
-	ctx := context.Background()
-
 	if len(command.Args) != 1 {
 		return fmt.Errorf("usage: %s <url>", command.Name)
 	}
 	url := command.Args[0]
+
+	ctx := context.Background()
 
 	feed, err := state.Db.GetFeedFromUrl(ctx, url)
 	if err != nil {
@@ -37,7 +37,7 @@ func handlerFollow(state *core.State, command core.Command, user database.AppUse
 		FeedID:    feed.ID,
 	})
 	if err != nil {
-		return fmt.Errorf("couldn't create feed follow record: %w", err)
+		return fmt.Errorf("couldn't create feed follow: %w", err)
 	}
 
 	color.Blue("Feed followed successfully:")

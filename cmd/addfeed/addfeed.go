@@ -29,9 +29,9 @@ func handlerAddFeed(state *core.State, command core.Command, user database.AppUs
 		ID:        uuid.New(),
 		CreatedAt: time.Now().UTC(),
 		UpdatedAt: time.Now().UTC(),
+		UserID:    user.ID,
 		Name:      name,
 		Url:       url,
-		UserID:    user.ID,
 	})
 	if err != nil {
 		return fmt.Errorf("couldn't create feed: %w", err)
