@@ -6,20 +6,16 @@ import (
 
 	"github.com/fatih/color"
 	"github.com/vitlobo/gator/internal/core"
+	"github.com/vitlobo/gator/internal/database"
 	"github.com/vitlobo/gator/internal/util"
 )
 
 func init() {
-	core.GetRegisteredCommands().Register("following", handlerFollowing)
+	core.GetRegisteredCommands().Register("following", core.MiddlewareLoggedIn(handlerFollowing))
 }
 
-func handlerFollowing(state *core.State, command core.Command) error {
+func handlerFollowing(state *core.State, command core.Command, user database.AppUser) error {
 	ctx := context.Background()
-
-	user, err := state.Db.GetUser(ctx, state.Cfg.CurrentUserName)
-	if err != nil {
-		return fmt.Errorf("couldn't find user: %w", err)
-	}
 
 	feedFollows, err := state.Db.GetFeedFollowsForUser(ctx, user.ID)
 	if err != nil {

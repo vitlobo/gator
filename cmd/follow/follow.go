@@ -13,15 +13,11 @@ import (
 )
 
 func init() {
-	core.GetRegisteredCommands().Register("follow", handlerFollow)
+	core.GetRegisteredCommands().Register("follow", core.MiddlewareLoggedIn(handlerFollow))
 }
 
-func handlerFollow(state *core.State, command core.Command) error {
+func handlerFollow(state *core.State, command core.Command, user database.AppUser) error {
 	ctx := context.Background()
-	user, err := state.Db.GetUser(ctx, state.Cfg.CurrentUserName)
-	if err != nil {
-		return fmt.Errorf("couldn't find user: %w", err)
-	}
 
 	if len(command.Args) != 1 {
 		return fmt.Errorf("usage: %s <url>", command.Name)

@@ -13,10 +13,10 @@ import (
 )
 
 func init() {
-	core.GetRegisteredCommands().Register("addfeed", handlerAddFeed)
+	core.GetRegisteredCommands().Register("addfeed", core.MiddlewareLoggedIn(handlerAddFeed))
 }
 
-func handlerAddFeed(state *core.State, command core.Command) error {
+func handlerAddFeed(state *core.State, command core.Command, user database.AppUser) error {
 	if len(command.Args) != 2 {
 		return fmt.Errorf("usage: %s <name> <url>", command.Name)
 	}
@@ -24,11 +24,6 @@ func handlerAddFeed(state *core.State, command core.Command) error {
 	url := command.Args[1]
 
 	ctx := context.Background()
-
-	user, err := state.Db.GetUser(ctx, state.Cfg.CurrentUserName)
-	if err != nil {
-		return err
-	}
 
 	feed, err := state.Db.CreateFeed(ctx, database.CreateFeedParams{
 		ID:        uuid.New(),
