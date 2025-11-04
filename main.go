@@ -19,13 +19,13 @@ import (
 func main() {
 	path, err := gatorsave.DefaultPath()
 	if err != nil {
-		color.Red("Error:", err)
+		color.Red("✗ Error:", err)
 		os.Exit(1)
 	}
 	// Load previous config snapshot
 	snap, err := gatorsave.Load(path)
 	if err != nil {
-		color.Yellow("Warning: could not read config:", err)
+		color.Yellow("• Warning: could not read config:", err)
 	}
 
 	cfg := &appcfg.Config{}
@@ -33,25 +33,25 @@ func main() {
 
 	db, err := sql.Open("postgres", cfg.DBURL)
 	if err != nil {
-		color.Red("error connecting to db:", err)
+		color.Red("✗ error connecting to db:", err)
 		os.Exit(1)
 	}
 	defer db.Close()
 	dbQueries := database.New(db)
 
-	gatorClient := gatorapi.NewClient(10*time.Second)
+	gatorClient := gatorapi.NewClient(10 * time.Second)
 
 	state := &core.State{
-		Cfg: cfg,
-		Db: dbQueries,
+		Cfg:         cfg,
+		Db:          dbQueries,
 		GatorClient: &gatorClient,
 	}
 
 	commands := core.GetRegisteredCommands()
 
 	if len(os.Args) < 2 {
-		color.Yellow("Usage: gator <command> [args...]")
-		color.Yellow("Available commands:", commands.GetCommandNames())
+		color.Yellow("• Usage: gator <command> [args...]")
+		color.Yellow("• Available commands:", commands.GetCommandNames())
 		os.Exit(1)
 	}
 
@@ -61,7 +61,7 @@ func main() {
 	}
 
 	if err := commands.Run(state, command); err != nil {
-		color.Red("Error: %v", err)
+		color.Red("✗ Error: %v", err)
 		os.Exit(1)
 	}
 }

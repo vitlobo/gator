@@ -45,7 +45,7 @@ func (c *Commands) Run(s *State, cmd Command) error {
 	handler, ok := c.RegisteredCommands[cmd.Name]
 	if !ok {
 		return fmt.Errorf(
-			"unknown command '%s'. Available commands: %v",
+			"unknown command '%s'\nAvailable commands: %v",
 			cmd.Name,
 			c.GetCommandNames(),
 		)
