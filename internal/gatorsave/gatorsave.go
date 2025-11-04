@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 )
 
-const SaveVersion    = 1
+const SaveVersion = 1
 const configFileName = ".gatorconfig.json"
 
 // SaveV1 -
@@ -18,9 +18,10 @@ type SaveV1 struct {
 
 func DefaultPath() (string, error) {
 	home, err := os.UserHomeDir()
-	if err != nil { return "", fmt.Errorf("home dir: %w", err) }
-	//return filepath.Join(home, "Documents", "gator", configFileName), nil
-	return filepath.Join(home, configFileName), nil
+	if err != nil {
+		return "", fmt.Errorf("home dir: %w", err)
+	}
+	return filepath.Join(home, ".config", "gator", configFileName), nil
 }
 
 func ensureDirFor(path string) error {
