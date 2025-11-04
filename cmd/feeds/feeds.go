@@ -29,7 +29,16 @@ func handlerListFeeds(state *core.State, command core.Command) error {
 	color.New(color.FgBlue).Printf("Found %d feeds:\n", len(feeds))
 	fmt.Println("====================================================")
 	fmt.Println()
-	util.PrintFeeds(feeds)
+	for _, feed := range feeds {
+		user, err := state.Db.GetUserByID(ctx, feed.UserID)
+		if err != nil {
+			return fmt.Errorf("couldn't get user: %w", err)
+		}
+		util.PrintFeed(feed, user)
+		fmt.Println("====================================================")
+	}
+	fmt.Println()
+	fmt.Println("====================================================")
 
 	return nil
 }

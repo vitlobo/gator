@@ -17,18 +17,14 @@ func PrintAddFeed(user database.AppUser, feed database.AppFeed) {
 	fmt.Printf("%s %v\n", blue(" * User:     "), user.Name)
 }
 
-func PrintFeeds(feeds []database.GetFeedsRow) {
+func PrintFeed(feed database.AppFeed, user database.AppUser) {
 	blue := color.New(color.FgBlue).SprintFunc()
-
-	for _, feed := range feeds {
-		fmt.Printf(" * ID:      %s\n", blue(feed.ID))
-		fmt.Printf(" * Created: %s\n", blue(feed.CreatedAt))
-		fmt.Printf(" * Updated: %s\n", blue(feed.UpdatedAt))
-		fmt.Printf(" * Name:    %s\n", blue(feed.Name))
-		fmt.Printf(" * URL:     %s\n", blue(feed.Url))
-		fmt.Printf(" * User:    %s\n", blue(feed.Username))
-		fmt.Println("====================================================")
-	}
+	fmt.Printf(" * ID:            %s\n", blue(feed.ID))
+	fmt.Printf(" * Created:       %s\n", blue(feed.CreatedAt))
+	fmt.Printf(" * Updated:       %s\n", blue(feed.UpdatedAt))
+	fmt.Printf(" * Name:          %s\n", blue(feed.Name))
+	fmt.Printf(" * URL:           %s\n", blue(feed.Url))
+	fmt.Printf(" * LastFetchedAt: %s\n", blue(feed.LastFetchedAt))
 }
 
 func PrintFeedFollow(username, feedname string) {
@@ -51,7 +47,7 @@ func PrintUser(user database.AppUser) {
 	fmt.Printf(" * Name:      %s\n", blue(user.Name))
 }
 
-func PrintDeleteFeedFollow(feed database.GetFeedByUrlRow) {
+func PrintDeleteFeedFollow(feed database.AppFeed) {
 	blue := color.New(color.FgBlue).SprintFunc()
 	fmt.Printf("%s %v\n", blue(" * Feed:"), feed.Name)
 	fmt.Printf("%s %v\n", blue(" * Url: "), feed.Url)

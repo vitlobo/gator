@@ -82,11 +82,7 @@ func (q *Queries) DeleteFeedFollow(ctx context.Context, arg DeleteFeedFollowPara
 
 const getFeedFollowsForUser = `-- name: GetFeedFollowsForUser :many
 SELECT
-    ff.id,
-    ff.created_at,
-    ff.updated_at,
-    ff.user_id,
-    ff.feed_id,
+    ff.id, ff.created_at, ff.updated_at, ff.user_id, ff.feed_id,
     f.name AS feed_name,
     u.name AS user_name
 FROM app.feed_follows AS ff

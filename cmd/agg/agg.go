@@ -2,10 +2,14 @@ package agg
 
 import (
 	"context"
+	"database/sql"
+	"errors"
 	"fmt"
 	"time"
 
 	"github.com/fatih/color"
+	"github.com/google/uuid"
+	"github.com/lib/pq"
 	"github.com/vitlobo/gator/internal/core"
 	"github.com/vitlobo/gator/internal/database"
 )
@@ -54,12 +58,10 @@ func scrapeFeeds(state *core.State) {
 func scrapeFeed(state *core.State, feed database.AppFeed) {
 	ctx := context.Background()
 
-	green := color.New(color.FgGreen).SprintFunc()
-	blue := color.New(color.FgBlue).SprintFunc()
-
 	feedData, err := state.GatorClient.FetchFeed(ctx, feed.Url)
 	if err != nil {
 		color.Red("✗ couldn't fetch feed %s: %v", feed.Name, err)
+		return
 	}
 
 	_, err = state.Db.MarkFeedFetched(ctx, feed.ID)
@@ -75,11 +77,40 @@ func scrapeFeed(state *core.State, feed database.AppFeed) {
 
 	fmt.Println("====================================================")
 	fmt.Println()
+
 	for _, item := range feedData.Channel.Item {
-		fmt.Printf("%s: %s\n", blue("Found post"), item.Title)
+		publishedAt := sql.NullTime{}
+		if pubTime, err := time.Parse(time.RFC1123Z, item.PubDate); err == nil {
+			publishedAt = sql.NullTime{
+				Time:  pubTime,
+				Valid: true,
+			}
+		}
+
+		_, err = state.Db.CreatePost(ctx, database.CreatePostParams{
+			ID:        uuid.New(),
+			CreatedAt: time.Now().UTC(),
+			UpdatedAt: time.Now().UTC(),
+			FeedID:    feed.ID,
+			Title:     item.Title,
+			Description: sql.NullString{
+				String: item.Description,
+				Valid:  true,
+			},
+			Url:         item.Link,
+			PublishedAt: publishedAt,
+		})
+
+		var pqErr *pq.Error
+		if errors.As(err, &pqErr) && pqErr.Code == "23505" {
+			color.Red("✗ couldn't create post for feed %s: %v", feed.Name, err)
+			continue
+		}
 	}
 
-	fmt.Println()
+	green := color.New(color.FgGreen).SprintFunc()
+	blue := color.New(color.FgBlue).SprintFunc()
+
 	fmt.Printf("%s %s %s (%d posts)\n", green("✓"), blue(feed.Name), blue("feed collected"), len(feedData.Channel.Item))
 	fmt.Println()
 	fmt.Println("====================================================")

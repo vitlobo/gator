@@ -14,11 +14,7 @@ INNER JOIN app.users AS u ON u.id = iff.user_id;
 
 -- name: GetFeedFollowsForUser :many
 SELECT
-    ff.id,
-    ff.created_at,
-    ff.updated_at,
-    ff.user_id,
-    ff.feed_id,
+    ff.*,
     f.name AS feed_name,
     u.name AS user_name
 FROM app.feed_follows AS ff

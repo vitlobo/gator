@@ -36,6 +36,17 @@ type AppGooseDbVersion struct {
 	Tstamp    time.Time
 }
 
+type AppPost struct {
+	ID          uuid.UUID
+	CreatedAt   time.Time
+	UpdatedAt   time.Time
+	Title       string
+	Url         string
+	Description sql.NullString
+	PublishedAt sql.NullTime
+	FeedID      uuid.UUID
+}
+
 type AppUser struct {
 	ID        uuid.UUID
 	CreatedAt time.Time
