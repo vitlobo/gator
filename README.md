@@ -34,9 +34,9 @@ Example:
 
 ```json
 {
-  "version": 1,
-  "current_user_name": "username",
-  "db_url": "postgres://username:password@localhost:5432/gator?sslmode=disable"
+    "version": 1,
+    "current_user_name": "username",
+    "db_url": "postgres://username:password@localhost:5432/gator?sslmode=disable"
 }
 ```
 
@@ -117,6 +117,7 @@ gator browse 10
 - Go 1.25
 - PostgreSQL
 - Goose (DB migrations)
+- SQLC
 - `github.com/fatih/color` for colored CLI output
 
 ---
