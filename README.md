@@ -36,7 +36,7 @@ Example:
 {
   "version": 1,
   "current_user_name": "username",
-  "db_url": "postgres://gator_app:password@localhost:5432/gator?sslmode=disable"
+  "db_url": "postgres://username:password@localhost:5432/gator?sslmode=disable"
 }
 ```
 
@@ -47,13 +47,11 @@ Example:
 Run migrations with Goose:
 
 ```bash
-goose -dir ./sql/schema postgres "postgres://gator_app:password@localhost:5432/gator?sslmode=disable" up
+goose -dir ./sql/schema postgres "postgres://username:password@localhost:5432/gator?sslmode=disable" up
 ```
 
-To reset:
-
 ```bash
-goose -dir ./sql/schema postgres "postgres://gator_app:password@localhost:5432/gator?sslmode=disable" down
+goose -dir ./sql/schema postgres "postgres://username:password@localhost:5432/gator?sslmode=disable" down
 ```
 
 ---
