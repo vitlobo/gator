@@ -120,7 +120,3 @@ gator browse 10
 - `github.com/fatih/color` for colored CLI output
 
 ---
-
-## License
-
-MIT © 2025 vitlobo
