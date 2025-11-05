@@ -60,19 +60,19 @@ goose -dir ./sql/schema postgres "postgres://username:password@localhost:5432/ga
 
 ### Common Commands
 
-| Command                 | Description                           | Example                                                 |
-| ----------------------- | ------------------------------------- | ------------------------------------------------------- |
-| `addfeed  <name> <url>` | Add a new RSS feed                    | `gator addfeed TechCrunch https://techcrunch.com/feed/` |
-| `agg      <duration>`   | Start feed aggregation loop           | `gator agg 45s`                                         |
-| `browse   [limit]`      | Browse recent posts (default limit 2) | `gator browse 10`                                       |
-| `feeds`                 | List all feeds being tracked          | `gator feeds`                                           |
-| `follow   <url>`        | Follow an existing feed               | `gator follow https://techcrunch.com/feed/`             |
-| `following`             | List all feeds you follow             | `gator following`                                       |
-| `login    <name>`       | Log in as an existing user            | `gator login alice`                                     |
-| `register <name>`       | Register and log in as a new user     | `gator register alice`                                  |
-| `reset`                 | Wipe the database                     | `gator reset`                                           |
-| `unfollow <url>`        | Unfollow a feed                       | `gator unfollow https://techcrunch.com/feed/`           |
-| `users`                 | Show all users                        | `gator users`                                           |
+| Command                | Description                           | Example                                                 |
+| ---------------------- | ------------------------------------- | ------------------------------------------------------- |
+| `addfeed <name> <url>` | Add a new RSS feed                    | `gator addfeed TechCrunch https://techcrunch.com/feed/` |
+| `agg <duration>`       | Start feed aggregation loop           | `gator agg 45s`                                         |
+| `browse [limit]`       | Browse recent posts (default limit 2) | `gator browse 10`                                       |
+| `feeds`                | List all feeds being tracked          | `gator feeds`                                           |
+| `follow <url>`         | Follow an existing feed               | `gator follow https://techcrunch.com/feed/`             |
+| `following`            | List all feeds you follow             | `gator following`                                       |
+| `login <name>`         | Log in as an existing user            | `gator login alice`                                     |
+| `register <name>`      | Register and log in as a new user     | `gator register alice`                                  |
+| `reset`                | Wipe the database                     | `gator reset`                                           |
+| `unfollow <url>`       | Unfollow a feed                       | `gator unfollow https://techcrunch.com/feed/`           |
+| `users`                | Show all users                        | `gator users`                                           |
 
 ---
 
